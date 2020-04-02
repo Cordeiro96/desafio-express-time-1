@@ -1,0 +1,45 @@
+<%- include('./partials/header') %>
+
+<main class="container text-center py-5 my-5">
+    <h2>Painel de controle</h2>
+    <h3>Contatos inscritos:</h3>
+    <br>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Email</th>
+        </tr>        
+      </thead>
+      <tbody>        
+        <% for(let i = 0; i < contatos.length; i++) { %>
+          <tr>
+            <th scope="row"><%= (i+1) %></th>
+            <td><%=contatos[i].email%></td>
+          </tr>
+        <% } %>        
+      </tbody>
+    </table>
+
+    <h3>Inscritos nas notícias:</h3>
+    <br>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Email</th>
+        </tr>        
+      </thead>
+      <tbody>
+        <% for(let i = 0; i < noticiados.length; i++) { %>
+          <tr>
+            <th scope="row"><%= (i+1) %></th>
+            <td><%=noticiados[i].email%></td>
+          </tr>
+        <% } %>   
+      </tbody>
+    </table>
+    <a href="/" class="btn btn-secondary my-5">voltar</a>
+</main>
+
+<%- include('./partials/footer') %>
