@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const bcrypt = require('bcrypt');
 
 const homeController = {
   index: (req, res) => {
@@ -83,6 +84,37 @@ const homeController = {
     }    
 
     res.render('painelcontrole', { contatos, noticiados, title: 'Painel de controle' });
+  },
+  cadastrousuario: (req, res) => {
+    res.render('cadastroUsuario', { title: 'Cadastro de usuário' });
+  },
+  salvarusuario: (req, res) => {
+
+    let { nome, email, senha } = req.body;
+
+    console.log('BODY');
+    console.log(req.body);
+
+    let hash = bcrypt.hashSync(senha, 10);
+
+    let usuario = { nome: nome, email: email, senha: hash, imagem: req.files[0].filename };
+    
+    console.log(usuario);
+
+    let caminho = path.join('db', 'usuarios.json');
+
+    let cadastrados = [];
+
+    if (fs.existsSync(caminho)){
+      cadastrados = fs.readFileSync(caminho, {encoding: 'utf-8'});
+      cadastrados = JSON.parse(cadastrados);
+    }
+
+    cadastrados.push(usuario);
+
+    fs.writeFileSync(caminho, JSON.stringify(cadastrados));
+
+    res.render('sucesso', { title: 'Deu certo', mensagem: `Usuario com email ${email} cadastrado com sucesso!` });
   }
 };
 
