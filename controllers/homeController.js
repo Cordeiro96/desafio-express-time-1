@@ -115,6 +115,22 @@ const homeController = {
     fs.writeFileSync(caminho, JSON.stringify(cadastrados));
 
     res.render('sucesso', { title: 'Deu certo', mensagem: `Usuario com email ${email} cadastrado com sucesso!` });
+  },
+  loginsistema: (req, res) => {
+    let cadastrados = [];
+    let usuario = req.body;
+    let caminho = path.join('db', 'usuarios.json');
+  
+    if (fs.existsSync(caminho)){
+      cadastrados = fs.readFileSync(caminho, {encoding: 'utf-8'});
+      cadastrados = JSON.parse(cadastrados);
+    }
+  
+    let hash = bcrypt.hashSync(usuario.senha);
+  
+    let userBuscado = cadastrados.filter((cadastrado) => {
+      return cadastrado.email == usuario.email && bcrypt.compareSync(cadastrado.senha, hash)
+    });
   }
 };
 

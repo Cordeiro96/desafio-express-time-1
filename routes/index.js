@@ -24,5 +24,6 @@ router.get('/newsletter', homeController.newsletter);
 router.get('/painelcontrole', homeController.painelcontrole);
 router.get('/cadastrousuario', homeController.cadastrousuario);
 router.post('/salvarusuario', upload.any(), homeController.salvarusuario);
+router.post('/loginsistema', homeController.loginsistema);
 
 module.exports = router;
