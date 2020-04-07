@@ -70,7 +70,7 @@ const homeController = {
   painelcontrole: (req, res) => {
     let contatos = [];
     let caminho;
-    caminho = path.join('db', 'contatos.json');
+    caminho = path.join('db', 'usuarios.json');
     if (fs.existsSync(caminho)){
       contatos = fs.readFileSync(caminho, {encoding: 'utf-8'});
       contatos = JSON.parse(contatos);
@@ -116,9 +116,12 @@ const homeController = {
 
     res.render('sucesso', { title: 'Deu certo', mensagem: `Usuario com email ${email} cadastrado com sucesso!` });
   },
+
   loginsistema: (req, res) => {
+
     let cadastrados = [];
-    let usuario = req.body;
+    let { email, senha } = req.body;
+
     let caminho = path.join('db', 'usuarios.json');
   
     if (fs.existsSync(caminho)){
@@ -126,11 +129,23 @@ const homeController = {
       cadastrados = JSON.parse(cadastrados);
     }
   
-    let hash = bcrypt.hashSync(usuario.senha);
-  
     let userBuscado = cadastrados.filter((cadastrado) => {
-      return cadastrado.email == usuario.email && bcrypt.compareSync(cadastrado.senha, hash)
+      return cadastrado.email == email;
     });
+
+    console.log(userBuscado);    
+    if (userBuscado[0] && bcrypt.compareSync(senha, userBuscado[0].senha)){
+      req.session.nome = userBuscado[0].nome;
+      req.session.email = userBuscado[0].email;
+      res.redirect('/painelcontrole');
+    } else {
+      res.render('login', { title: 'Login', mensagem: 'E-mail ou senha não encontrado' });
+    }
+
+  },
+
+  login: (req, res) => {
+    res.render('login', { title: 'Logar no sistema' });
   }
 };
 

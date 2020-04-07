@@ -1,5 +1,10 @@
 function auth(req, res, next) {
-  if(typeof(req.session.usuario) != undefined) {
+  if(req.session.nome != undefined) {
     return next();
   }
+  else {
+    res.redirect('/login');
+  }
 }
+
+module.exports = auth;
